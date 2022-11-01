@@ -146,6 +146,12 @@ func (bar *Bar) SetCurrValue(curr int64) {
 
 func (bar *Bar) SetGraph(graph string) {
 	bar.graph = graph
+	gl := len(graph)
+	if gl > 1 {
+		for i := 1; i < gl; i++ {
+			bar.backGraph += " "
+		}
+	}
 }
 
 func (bar *Bar) SetGraphTotal(graphTotal int) {
@@ -176,7 +182,7 @@ func (bar *Bar) SetDescribe(describe string) {
 	bar.describe = describe
 }
 
-func (bar *Bar) SetBackGraph(bg string) {
+func (bar *Bar) setBackGraph(bg string) {
 	bar.backGraph = bg
 }
 
