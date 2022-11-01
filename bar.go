@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"runtime"
 	"strings"
+	"unicode/utf8"
 )
 
 type Bar struct {
@@ -72,11 +73,11 @@ func (bar *Bar) getPercent() int64 {
 }
 
 func (bar *Bar) PrintBar(curr int64) {
+	fmt.Print("\r                                               																															")
 	bar.SetCurrValue(curr)
 	printBar := "\r" + bar.getDescribe()
 	printBar += bar.getProgressBarString()
 	printBar += bar.getPercentPrintString()
-	printBar += "     "
 	printBar += bar.RatioPrintString()
 	fmt.Print(printBar)
 }
@@ -147,9 +148,12 @@ func (bar *Bar) SetCurrValue(curr int64) {
 
 func (bar *Bar) SetGraph(graph string) {
 	bar.graph = graph
-	gl := len(graph)
-	if gl > 1 {
-		for i := 1; i < gl; i++ {
+	bar.backGraph = ""
+	for _, g := range graph {
+		_, size := utf8.DecodeRuneInString(string(g))
+		if size > 3 {
+			bar.backGraph += "  "
+		} else {
 			bar.backGraph += " "
 		}
 	}
