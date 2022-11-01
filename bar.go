@@ -76,6 +76,7 @@ func (bar *Bar) PrintBar(curr int64) {
 	printBar := "\r" + bar.getDescribe()
 	printBar += bar.getProgressBarString()
 	printBar += bar.getPercentPrintString()
+	printBar += "     "
 	printBar += bar.RatioPrintString()
 	fmt.Print(printBar)
 }
