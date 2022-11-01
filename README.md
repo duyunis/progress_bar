@@ -6,5 +6,5 @@
 ## Usage
 
 ```bash
-go get -u github.com/duyunzhi/progress-bar
+go get -u github.com/duyunzhi/progress_bar
 ```
