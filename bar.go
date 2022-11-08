@@ -309,6 +309,9 @@ func initOptions(options *Options) {
 	if options.Graph == "" {
 		options.Graph = "█"
 	}
+	if options.Color == nil {
+		options.Color = &BarColor{}
+	}
 }
 
 func NewBar(total int64) *Bar {
