@@ -318,6 +318,7 @@ func NewBar(total int64) *Bar {
 		backGraph:   " ",
 		graphTotal:  50,
 		currentRate: "0 B/s",
+		color:       &BarColor{},
 		quit:        make(chan bool, 1),
 	}
 	bar.countCurrentPercent()
