@@ -188,6 +188,7 @@ func (bar *Bar) currentBarGraphNumber() int {
 func (bar *Bar) Finish() {
 	bar.lock.Lock()
 	defer bar.lock.Unlock()
+	fmt.Println()
 	bar.finish = true
 	bar.quit <- true
 }
