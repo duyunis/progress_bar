@@ -286,7 +286,7 @@ func (bar *Bar) startCalcDuration() {
 }
 
 func (bar *Bar) startCalcRate() {
-	ticker := time.NewTicker(time.Second)
+	ticker := time.NewTicker(time.Millisecond * 100)
 	go func() {
 	LOOP:
 		for {
@@ -297,7 +297,7 @@ func (bar *Bar) startCalcRate() {
 				bar.lock.Lock()
 				if bar.latestCount > 0 {
 					count := bar.current - bar.latestCount
-					bar.currentRate = formatBytes(float64(count)) + "/s"
+					bar.currentRate = formatBytes(float64(count*10)) + "/s"
 				}
 				bar.latestCount = bar.current
 				bar.lock.Unlock()
