@@ -105,14 +105,17 @@ func (bar *Bar) Add(curr int64) {
 		printBar += bar.getDuration()
 	}
 	fmt.Print(printBar + "  ")
-	fmt.Printf("\033[%dA\033[%dB", 1, 0)
 }
 
 func (bar *Bar) getDescribe() string {
 	if bar.describe == "" {
 		return ""
 	}
-	return fmt.Sprintf(" %c[%vm%v%c[0m", 0x1B, bar.color.DescribeColor, bar.describe, 0x1B)
+	if runtime.GOOS == "windows" || (bar.color.DescribeColor == 0) {
+		return bar.describe
+	} else {
+		return fmt.Sprintf(" %c[%vm%v%c[0m", 0x1B, bar.color.DescribeColor, bar.describe, 0x1B)
+	}
 }
 
 func (bar *Bar) getProgressBarString() string {
