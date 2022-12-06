@@ -13,7 +13,7 @@ type Bar struct {
 	lock           sync.RWMutex
 	current        int64
 	total          int64
-	latestCount    int64
+	lastCount      int64
 	currentPercent int64
 	currentRate    string
 	graph          string
@@ -140,6 +140,7 @@ func (bar *Bar) getDuration() string {
 }
 
 func (bar *Bar) getRatioPrintString() string {
+	bar.startCalcRate()
 	var curr any
 	var total any
 	if bar.showBytes {
@@ -264,7 +265,7 @@ func (bar *Bar) genSpace(n int) string {
 }
 
 func (bar *Bar) startCalcDuration() {
-	ticker := time.NewTicker(time.Microsecond * 100)
+	ticker := time.NewTicker(time.Second)
 	go func() {
 	LOOP:
 		for {
@@ -277,8 +278,12 @@ func (bar *Bar) startCalcDuration() {
 					bar.lock.Unlock()
 					break
 				}
-				speed := (bar.total - bar.current) * 100 / bar.current * 100
-				bar.duration = formatTime(int(speed / 100))
+				sp := bar.current - bar.lastCount
+				if sp > 0 {
+					speed := (bar.total - bar.current) / sp
+					bar.duration = formatTime(int(speed))
+				}
+				bar.lastCount = bar.current
 				bar.lock.Unlock()
 			}
 		}
@@ -286,24 +291,8 @@ func (bar *Bar) startCalcDuration() {
 }
 
 func (bar *Bar) startCalcRate() {
-	ticker := time.NewTicker(time.Millisecond * 100)
-	go func() {
-	LOOP:
-		for {
-			select {
-			case <-bar.quit:
-				break LOOP
-			case <-ticker.C:
-				bar.lock.Lock()
-				if bar.latestCount > 0 {
-					count := bar.current - bar.latestCount
-					bar.currentRate = formatBytes(float64(count*10)) + "/s"
-				}
-				bar.latestCount = bar.current
-				bar.lock.Unlock()
-			}
-		}
-	}()
+	count := bar.current - bar.lastCount
+	bar.currentRate = formatBytes(float64(count*10)) + "/s"
 }
 
 func initOptions(options *Options) {
@@ -327,7 +316,6 @@ func NewBar(total int64) *Bar {
 	}
 	bar.countCurrentPercent()
 	bar.startCalcDuration()
-	bar.startCalcRate()
 	return bar
 }
 
@@ -348,6 +336,5 @@ func NewBarWithOptions(total int64, options *Options) *Bar {
 	}
 	bar.countCurrentPercent()
 	bar.startCalcDuration()
-	bar.startCalcRate()
 	return bar
 }
