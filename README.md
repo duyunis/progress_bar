@@ -7,7 +7,7 @@
 
 ### install
 ```bash
-go get -u github.com/duyunzhi/progress_bar
+go get -u github.com/duyunis/progress_bar
 ```
 
 ### example
@@ -16,7 +16,7 @@ go get -u github.com/duyunzhi/progress_bar
 package main
 
 import (
-	"github.com/duyunzhi/progress_bar"
+	"github.com/duyunis/progress_bar"
 	"time"
 )
 
@@ -49,4 +49,4 @@ func main() {
 
 ### effect
 
-![](https://cdn.duyunzhi.cn/image/progressBar.gif)
+![](https://cdn.duyunis.cn/image/progressBar.gif)

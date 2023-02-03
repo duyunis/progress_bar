@@ -1,3 +1,3 @@
-module github.com/duyunzhi/progress_bar
+module github.com/duyunis/progress_bar
 
 go 1.19
